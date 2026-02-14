@@ -78,6 +78,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var footman_damage: float = 15.0
 @export var footman_attack_delay: float = 1.0
 @export var footman_attack_range: float = 1.5
+@export_range(0.0, 1.0, 0.05) var footman_stagger_resistance: float = 0.2
 
 # =============================================================================
 # UNIT STATS - CAVALRY
@@ -87,6 +88,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var cavalry_damage: float = 25.0
 @export var cavalry_attack_delay: float = 1.2
 @export var cavalry_attack_range: float = 1.8
+@export_range(0.0, 1.0, 0.05) var cavalry_stagger_resistance: float = 0.5
 
 # =============================================================================
 # UNIT STATS - ARCHER
@@ -95,6 +97,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var archer_speed: float = 2.0
 @export var archer_damage: float = 20.0
 @export var archer_attack_delay: float = 2.0
+@export_range(0.0, 1.0, 0.05) var archer_stagger_resistance: float = 0.0
 
 # =============================================================================
 # UNIT STATS - FLYER (Eagle)
@@ -105,6 +108,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var flyer_attack_delay: float = 1.5
 @export var flyer_attack_range: float = 2.0
 @export var flyer_altitude: float = 5.0
+@export_range(0.0, 1.0, 0.05) var flyer_stagger_resistance: float = 0.0
 
 # =============================================================================
 # ENEMY STATS - BRUTE
@@ -114,6 +118,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var brute_damage: float = 30.0
 @export var brute_attack_delay: float = 1.5
 @export var brute_attack_range: float = 2.0
+@export_range(0.0, 1.0, 0.05) var brute_stagger_resistance: float = 0.7
 
 # =============================================================================
 # ENEMY STATS - BOSS (scaled brute)
@@ -248,7 +253,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"damage": footman_damage * damage_multiplier,
 				"attack_delay": footman_attack_delay * attack_speed_multiplier,
 				"attack_range": footman_attack_range,
-				"size": footman_size
+				"size": footman_size,
+				"stagger_resistance": footman_stagger_resistance
 			}
 		"cavalry":
 			return {
@@ -257,7 +263,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"damage": cavalry_damage * damage_multiplier,
 				"attack_delay": cavalry_attack_delay * attack_speed_multiplier,
 				"attack_range": cavalry_attack_range,
-				"size": cavalry_size
+				"size": cavalry_size,
+				"stagger_resistance": cavalry_stagger_resistance
 			}
 		"archer":
 			return {
@@ -266,7 +273,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"damage": archer_damage * damage_multiplier,
 				"attack_delay": archer_attack_delay * attack_speed_multiplier,
 				"attack_range": get_projectile_max_range(),
-				"size": archer_size
+				"size": archer_size,
+				"stagger_resistance": archer_stagger_resistance
 			}
 		"flyer":
 			return {
@@ -276,7 +284,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"attack_delay": flyer_attack_delay * attack_speed_multiplier,
 				"attack_range": flyer_attack_range,
 				"size": flyer_size,
-				"altitude": flyer_altitude
+				"altitude": flyer_altitude,
+				"stagger_resistance": flyer_stagger_resistance
 			}
 		"brute":
 			return {
@@ -285,7 +294,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"damage": brute_damage,
 				"attack_delay": brute_attack_delay,
 				"attack_range": brute_attack_range,
-				"size": brute_size
+				"size": brute_size,
+				"stagger_resistance": brute_stagger_resistance
 			}
 		"boss":
 			return {
@@ -294,7 +304,8 @@ func get_unit_stats(unit_type: String) -> Dictionary:
 				"damage": brute_damage * boss_damage_multiplier,
 				"attack_delay": brute_attack_delay,
 				"attack_range": brute_attack_range,
-				"size": brute_size * boss_size_multiplier
+				"size": brute_size * boss_size_multiplier,
+				"stagger_resistance": 1.0
 			}
 	return {}
 

@@ -16,6 +16,7 @@ var speed: float
 var damage: float
 var attack_delay: float
 var attack_range: float
+var stagger_resistance: float
 
 var state: UnitState = UnitState.IDLE
 var target: BaseUnit = null
@@ -38,6 +39,7 @@ func _load_stats() -> void:
 	damage = stats.damage
 	attack_delay = stats.attack_delay
 	attack_range = stats.attack_range
+	stagger_resistance = stats.get("stagger_resistance", 0.0)
 
 func _setup_visuals() -> void:
 	var stats = GameConfig.get_unit_stats(unit_type)
@@ -165,7 +167,9 @@ func _clamp_to_battlefield() -> void:
 		global_position.y = 0.0
 
 func apply_hit_stagger() -> void:
-	stagger_timer = GameConfig.hit_stagger_duration
+	var duration = GameConfig.hit_stagger_duration * (1.0 - stagger_resistance)
+	if duration > 0.0:
+		stagger_timer = duration
 
 func _check_collision_engagement() -> void:
 	if unit_type == "archer":

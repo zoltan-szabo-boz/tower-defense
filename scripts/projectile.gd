@@ -42,8 +42,13 @@ func _setup_collision() -> void:
 	add_child(collision_shape)
 
 	collision_layer = 8
-	# Start with no collision mask — enabled after grace period
-	collision_mask = 0
+	# During grace period, only collide with enemies (not friendlies)
+	# Team 1 projectile hits team 2 (layer 4) + ground (layer 1)
+	# Team 2 projectile hits team 1 (layer 2) + ground (layer 1)
+	if team == 1:
+		collision_mask = 4 | 1  # Enemy team + ground
+	else:
+		collision_mask = 2 | 1  # Enemy team + ground
 
 func launch_at_target(from: Vector3, to: Vector3) -> void:
 	var gravity = GameConfig.projectile_gravity
@@ -94,11 +99,11 @@ func _physics_process(delta: float) -> void:
 	if not launched or has_hit:
 		return
 
-	# Grace period: no collision until timer expires
+	# Grace period: only friendlies are ignored, enemies can be hit immediately
 	if grace_timer > 0:
 		grace_timer -= delta
 		if grace_timer <= 0:
-			collision_mask = 2 | 4 | 1  # Enable collision with teams + ground
+			collision_mask = 2 | 4 | 1  # Enable collision with all teams + ground
 
 	if linear_velocity.length() > 0.1:
 		look_at(global_position + linear_velocity.normalized(), Vector3.UP)

@@ -143,7 +143,7 @@ var grid_origin: Vector3  # World position of grid cell (0,0) bottom-left corner
 @export var projectile_speed: float = 22.0
 @export var projectile_gravity: float = 10.0
 @export var projectile_despawn_delay: float = 2.5
-@export var projectile_grace_time: float = 0.2  # Seconds before projectile can collide (passes through friendlies near archer)
+@export var projectile_grace_time: float = 0.4  # Seconds before projectile can collide with friendlies (enemies always hittable)
 @export_range(0.0, 45.0, 0.5) var archer_aim_deviation: float = 8.0
 @export var hit_stagger_duration: float = 0.5
 

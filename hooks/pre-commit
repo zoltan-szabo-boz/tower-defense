@@ -1,0 +1,7 @@
+#!/bin/sh
+# Pre-commit hook: inject Discord webhook into web export if docs/index.html is being committed
+
+if git diff --cached --name-only | grep -q "^docs/index.html$"; then
+    python post_web_build.py
+    git add docs/index.html
+fi

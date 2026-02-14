@@ -1,6 +1,6 @@
 # Tower Defense
 
-A tower defense game built in Godot 4.6, reusing the combat system from the [autobattler](../autobattler/) project. Game-jam-scoped: focused, minimal, playable.
+A tower defense game built in Godot 4.6, reusing the combat system from the [autobattler](https://github.com/zoltan-szabo-boz/autobattler) project. Game-jam-scoped: focused, minimal, playable.
 
 ## How to Play
 

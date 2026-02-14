@@ -70,10 +70,10 @@ func _setup_collision() -> void:
 
 	if team == 1:
 		collision_layer = 2
-		collision_mask = 4 | 8
+		collision_mask = 4
 	else:
 		collision_layer = 4
-		collision_mask = 2 | 8
+		collision_mask = 2
 
 func _physics_process(delta: float) -> void:
 	attack_timer -= delta

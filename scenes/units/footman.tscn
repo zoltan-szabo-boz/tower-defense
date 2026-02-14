@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/units/base_unit.gd" id="1_base"]
+
+[node name="Footman" type="CharacterBody3D"]
+script = ExtResource("1_base")
+unit_type = "footman"
+targeting_mode = 0

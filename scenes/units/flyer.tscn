@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/units/flyer_unit.gd" id="1_flyer"]
+
+[node name="Flyer" type="CharacterBody3D"]
+script = ExtResource("1_flyer")
+unit_type = "flyer"
+targeting_mode = 0

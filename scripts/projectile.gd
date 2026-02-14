@@ -7,6 +7,7 @@ var shooter: BaseUnit = null
 var has_hit: bool = false
 var launched: bool = false
 var launch_velocity: Vector3 = Vector3.ZERO
+var grace_timer: float = 0.0  # No collision during grace period
 
 var mesh_instance: MeshInstance3D
 
@@ -41,7 +42,8 @@ func _setup_collision() -> void:
 	add_child(collision_shape)
 
 	collision_layer = 8
-	collision_mask = 2 | 4 | 1
+	# Start with no collision mask — enabled after grace period
+	collision_mask = 0
 
 func launch_at_target(from: Vector3, to: Vector3) -> void:
 	var gravity = GameConfig.projectile_gravity
@@ -86,10 +88,17 @@ func launch_at_target(from: Vector3, to: Vector3) -> void:
 		freeze = false
 		linear_velocity = launch_velocity
 		launched = true
+		grace_timer = GameConfig.projectile_grace_time
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not launched or has_hit:
 		return
+
+	# Grace period: no collision until timer expires
+	if grace_timer > 0:
+		grace_timer -= delta
+		if grace_timer <= 0:
+			collision_mask = 2 | 4 | 1  # Enable collision with teams + ground
 
 	if linear_velocity.length() > 0.1:
 		look_at(global_position + linear_velocity.normalized(), Vector3.UP)

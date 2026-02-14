@@ -109,7 +109,9 @@ func _on_wave_started(wave_number: int) -> void:
 	timer_label.text = "IN PROGRESS"
 
 func _on_countdown_updated(seconds: float) -> void:
-	if seconds > 0:
+	if seconds < 0:
+		timer_label.text = "BOSS ALIVE"
+	elif seconds > 0:
 		timer_label.text = "Next Wave: %ds" % int(ceil(seconds))
 	else:
 		timer_label.text = "Next Wave: NOW"

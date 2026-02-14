@@ -183,8 +183,8 @@ func _would_hit_friendly(from_pos: Vector3, to_pos: Vector3) -> bool:
 	var direction = (to_pos - from_pos).normalized()
 	var distance_to_target = from_pos.distance_to(to_pos)
 
-	# Projectiles pass through everything within grace distance
-	var grace_dist = GameConfig.projectile_speed * GameConfig.projectile_grace_time
+	# Projectiles pass through friendlies within the grace fraction of total distance
+	var grace_dist = distance_to_target * GameConfig.projectile_grace_fraction
 
 	for friendly in friendlies:
 		if friendly == self:

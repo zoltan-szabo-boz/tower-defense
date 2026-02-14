@@ -7,7 +7,8 @@ var shooter: BaseUnit = null
 var has_hit: bool = false
 var launched: bool = false
 var launch_velocity: Vector3 = Vector3.ZERO
-var grace_timer: float = 0.0  # No collision during grace period
+var grace_timer: float = 0.0  # No friendly collision during grace period
+var flight_distance: float = 0.0  # Horizontal distance to target (for grace calculation)
 
 var mesh_instance: MeshInstance3D
 
@@ -88,12 +89,17 @@ func launch_at_target(from: Vector3, to: Vector3) -> void:
 
 	gravity_scale = gravity / 9.8
 
+	# Calculate flight time and set grace period as a fraction of it
+	flight_distance = horizontal_dist
+	var estimated_flight_time = horizontal_dist / maxf(v_horizontal, 0.1)
+	var grace_fraction = GameConfig.projectile_grace_fraction
+
 	await get_tree().create_timer(0.05).timeout
 	if is_instance_valid(self) and not has_hit:
 		freeze = false
 		linear_velocity = launch_velocity
 		launched = true
-		grace_timer = GameConfig.projectile_grace_time
+		grace_timer = estimated_flight_time * grace_fraction
 
 func _physics_process(delta: float) -> void:
 	if not launched or has_hit:
@@ -118,11 +124,15 @@ func _on_body_entered(body: Node) -> void:
 	if body == shooter:
 		return
 
+	# During grace period, ignore friendly units entirely
+	if body is BaseUnit:
+		var unit = body as BaseUnit
+		if unit.team == team and grace_timer > 0:
+			return
+
 	has_hit = true
 
-	var hit_unit = body is BaseUnit
-
-	if hit_unit:
+	if body is BaseUnit:
 		var unit = body as BaseUnit
 		var valid_shooter = shooter if is_instance_valid(shooter) else null
 		unit.take_damage(damage, valid_shooter)

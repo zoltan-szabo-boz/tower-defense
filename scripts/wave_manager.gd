@@ -84,11 +84,11 @@ func _spawn_single_enemy(enemy_type: String, wave_number: int) -> void:
 	if unit:
 		unit.unit_died.connect(_on_enemy_died.bind(wave_number, enemy_type))
 
-func _on_enemy_died(_unit: BaseUnit, wave_number: int, enemy_type: String) -> void:
+func _on_enemy_died(unit: BaseUnit, wave_number: int, enemy_type: String) -> void:
 	enemies_alive -= 1
 
 	if enemy_type == "boss":
-		boss_alive = _check_any_boss_alive()
+		boss_alive = _check_any_boss_alive(unit)
 
 	# Track per-wave completion
 	if _active_waves.has(wave_number):
@@ -100,9 +100,11 @@ func _on_enemy_died(_unit: BaseUnit, wave_number: int, enemy_type: String) -> vo
 	if enemies_alive <= 0:
 		all_enemies_dead.emit()
 
-func _check_any_boss_alive() -> bool:
+func _check_any_boss_alive(dying_unit: BaseUnit = null) -> bool:
 	var units = get_tree().get_nodes_in_group("team_2")
 	for unit in units:
+		if unit == dying_unit:
+			continue
 		if is_instance_valid(unit) and unit is BaseUnit and unit.unit_type == "boss":
 			return true
 	return false
